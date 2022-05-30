@@ -30,17 +30,15 @@ public class HcpService implements IHcpService, IHcpContext {
 	private final HcpApiPutMehtod hcpApiPutMehtod = new HcpApiPutMehtod();
 	private final Supplier<String> getToken;// 取得token策略
 
-	public HcpService(CloseableHttpClient client, HcpOption option, Supplier<String> getToken) {
+	public HcpService(CloseableHttpClient client, HcpOption option) {
 		this.client = client;
 		this.option = option;
 		this.option.check();
-		this.getToken = getToken;
+		this.getToken = option.getTokens();
 	}
 
 	public HcpService(HcpOption option) {
-		this(HcpHttpClientBuilder.build(), option, () -> {
-			return "HCP " + HcpUtil.getBase64Value(option.getUser()) + ":" + HcpUtil.getMD5Value(option.getPwd());
-		});
+		this(HcpHttpClientBuilder.build(), option);
 	}
 
 	@Override

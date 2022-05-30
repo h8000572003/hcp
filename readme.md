@@ -1,5 +1,14 @@
 ## HCP範例程式
 
+### 注意事項
+
+參數執行HcpServiceTest前須調整參數，輸入正確參數
+
+```
+String user = "user";
+String pwd = "pwd";
+String url = "url";
+```
 1.建立常用通用方式
  - put上傳檔案
  - get取得檔案

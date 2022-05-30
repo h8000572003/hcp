@@ -1,8 +1,5 @@
 package io.github.h800572003.hcp;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import io.github.h800572003.hcp.exception.HcpCodeExcepton;
 import io.github.h800572003.hcp.method.BaseHcpInfo;
+import io.github.h800572003.hcp.method.PathBuilder;
 import io.github.h800572003.hcp.method.delete.HcpDelete;
 import io.github.h800572003.hcp.method.get.GetHcpInfo;
 import io.github.h800572003.hcp.method.get.HcpGet;
@@ -27,23 +25,31 @@ import lombok.extern.slf4j.Slf4j;
 class HcpServiceTest {
 
 	IHcpService hcpService;
+	private String token = "";
+	private String user = "user";
+	private String pwd = "pwd";
+	private String url = "url";
+	public HcpServiceTest() {
+		token = "HCP " + HcpUtil.getBase64Value(user) + ":" + HcpUtil.getMD5Value(pwd);
+	}
 
 	@BeforeEach
 	public void init() {
-		HcpOption option = new HcpOption();
-		option.setRest("url");
-		option.setUser("user");
-		option.setPwd("pwd");
 
+		HcpOption option = new HcpOption(url, () -> token);
 		this.hcpService = new HcpService(option);
 	}
 
 	@Test
 	void test_execute_then_get_then_size() throws HcpCodeExcepton {
 
-		HcpGet hcpDownloadInfo = new HcpGet();
-		String restPath = HcpUtil.toRestPath("x.pdf", "1", "2", "3", "4");
-		hcpDownloadInfo.setPath(restPath);
+		PathBuilder path = PathBuilder.builder()//
+				.filename("x.pdf")//
+				.path("1")///
+				.path("2")//
+				.path("3");//
+
+		HcpGet hcpDownloadInfo = new HcpGet(path);
 
 		GetHcpInfo execute = hcpService.execute(hcpDownloadInfo);
 		String size = execute.getSize();
@@ -52,9 +58,14 @@ class HcpServiceTest {
 
 	@Test
 	void test_execute_then_delete() throws HcpCodeExcepton {
-		HcpDelete cmd = new HcpDelete();
-		String restPath = HcpUtil.toRestPath("x.pdf", "1", "2", "3", "4");
-		cmd.setPath(restPath);
+
+		PathBuilder path = PathBuilder.builder()//
+				.filename("x.pdf")//
+				.path("1")///
+				.path("2")//
+				.path("3");//
+
+		HcpDelete cmd = new HcpDelete(path);
 
 		BaseHcpInfo execute = hcpService.execute(cmd);
 
@@ -63,12 +74,17 @@ class HcpServiceTest {
 	@Test
 	void test_execute_then_put() throws IOException, URISyntaxException, HcpCodeExcepton {
 
-		String restPath = HcpUtil.toRestPath("x.pdf", "1", "2", "3", "4");
+		PathBuilder path = PathBuilder.builder()//
+				.filename("x.pdf")//
+				.path("1")///
+				.path("2")//
+				.path("3");//
+
 		URL resource = HcpServiceTest.class.getClassLoader().getResource("test.zip");
 
 		byte[] myByte = FileUtils.readFileToByteArray(new File(resource.toURI()));
 
-		HcpPut cmd = new HcpPut(restPath, myByte);
+		HcpPut cmd = new HcpPut(path, myByte);
 
 		BaseHcpInfo execute = hcpService.execute(cmd);
 

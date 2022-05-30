@@ -1,25 +1,29 @@
 package io.github.h800572003.hcp;
 
+import java.util.function.Supplier;
+
 import org.apache.commons.lang3.StringUtils;
 
 import io.github.h800572003.hcp.exception.HcpBusinessException;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class HcpOption {
-	private String user;
-	private String pwd;
 	private String rest;
-
+	private Supplier<String> tokens;
+	public HcpOption(String rest, Supplier<String> tokens) {
+		super();
+		this.rest = rest;
+		this.tokens = tokens;
+	}
 	public void check() {
-		if (StringUtils.isBlank(user)) {
-			throw new HcpBusinessException("user is require");
-		}
-		if (StringUtils.isBlank(pwd)) {
-			throw new HcpBusinessException("pwd is require");
+		if (tokens == null) {
+			throw new HcpBusinessException("tokens is require");
 		}
 		if (StringUtils.isBlank(rest)) {
 			throw new HcpBusinessException("rest is require");
 		}
 	}
+
+	
 }
