@@ -6,8 +6,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.h800572003.hcp.exception.HcpCodeExcepton;
@@ -20,15 +21,16 @@ import io.github.h800572003.hcp.method.put.HcpPut;
 import io.github.h800572003.hcp.utils.HcpUtil;
 import lombok.extern.slf4j.Slf4j;
 
-@Disabled
+//@Disabled
 @Slf4j
 class HcpServiceTest {
 
 	IHcpService hcpService;
 	private String token = "";
-	private String user = "user";
-	private String pwd = "pwd";
-	private String url = "url";
+	private String user = "-";
+	private String pwd = "-";
+	private String url = "-";
+
 	public HcpServiceTest() {
 		token = "HCP " + HcpUtil.getBase64Value(user) + ":" + HcpUtil.getMD5Value(pwd);
 	}
@@ -49,10 +51,11 @@ class HcpServiceTest {
 				.path("2")//
 				.path("3");//
 
-		HcpGet hcpDownloadInfo = new HcpGet(path);
+		HcpGet hcpDownloadInfo = new HcpGet("/tax");
 
 		GetHcpInfo execute = hcpService.execute(hcpDownloadInfo);
-		String size = execute.getSize();
+		log.info("execute:{}", execute);
+		// String size = execute.getSize();
 
 	}
 
@@ -90,7 +93,8 @@ class HcpServiceTest {
 
 	}
 
-	void close() {
+	@AfterEach
+	public void close() {
 		hcpService.close();
 	}
 

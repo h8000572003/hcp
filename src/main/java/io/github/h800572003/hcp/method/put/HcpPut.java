@@ -4,19 +4,19 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 
-import io.github.h800572003.hcp.exception.HcpBusinessException;
 import io.github.h800572003.hcp.method.PathBuilder;
 
 public class HcpPut implements IHcpPut {
 	private String path;
 	private byte[] putByte;
+
 	public HcpPut(PathBuilder pathBuilder, byte[] myByte) {
 		super();
 		this.path = pathBuilder.to();
 		this.putByte = myByte;
 	}
+
 	public HcpPut(String path, File file) throws IOException {
 		this(path, FileUtils.readFileToByteArray(file));
 	}
@@ -34,16 +34,6 @@ public class HcpPut implements IHcpPut {
 
 	public void setPath(String path) {
 		this.path = path;
-	}
-
-	@Override
-	public void check() {
-		if (StringUtils.isBlank(path)) {
-			throw new HcpBusinessException("path is require");
-		}
-		if (putByte == null) {
-			throw new HcpBusinessException("putByte is require");
-		}
 	}
 
 	@Override

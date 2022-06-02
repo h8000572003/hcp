@@ -23,11 +23,4 @@ public class HcpDelete implements IHcpDelete {
 		return path;
 	}
 
-	@Override
-	public void check() {
-		if (StringUtils.isBlank(path)) {
-			throw new HcpBusinessException("path is require");
-		}
-
-	}
 }

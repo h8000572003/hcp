@@ -12,7 +12,7 @@
 	</parent>
 	<groupId>io.github.h8000572003</groupId>
 	<artifactId>hcp</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<packaging>jar</packaging>
 	<description>hcp sample</description>

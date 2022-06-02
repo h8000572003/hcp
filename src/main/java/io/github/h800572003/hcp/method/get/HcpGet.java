@@ -21,12 +21,5 @@ public class HcpGet implements IHcpGet {
 		return path;
 	}
 
-	@Override
-	public void check() {
-		if (StringUtils.isBlank(path)) {
-			throw new HcpBusinessException("path is require");
-		}
-
-	}
 
 }

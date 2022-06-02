@@ -29,47 +29,47 @@ public class HcpService implements IHcpService, IHcpContext {
 	private final HcpApiDeleteMehtod hcpApiDeleteMehtod = new HcpApiDeleteMehtod();
 	private final HcpApiPutMehtod hcpApiPutMehtod = new HcpApiPutMehtod();
 	private final Supplier<String> getToken;// 取得token策略
+	private final IHcpMethodCheck hcpMethodCheck;
 
-	public HcpService(CloseableHttpClient client, HcpOption option) {
+	public HcpService(CloseableHttpClient client, HcpOption option, IHcpMethodCheck hcpMethodCheck) {
 		this.client = client;
 		this.option = option;
 		this.option.check();
 		this.getToken = option.getTokens();
+		this.hcpMethodCheck = hcpMethodCheck;
 	}
 
 	public HcpService(HcpOption option) {
-		this(HcpHttpClientBuilder.build(), option);
+		this(HcpHttpClientBuilder.build(), option, new HcpMethodCheck());
 	}
 
 	@Override
 	public <O extends Serializable, I extends IHcpMethod> O execute(HcpApiMethod<I, O> api, I cmd)
 			throws HcpCodeExcepton {
-		cmd.check();
 		return api.execute(cmd, this);
 	}
 
 	@Override
 	public GetHcpInfo execute(IHcpGet hcpGet) throws HcpCodeExcepton {
+		this.hcpMethodCheck.check(hcpGet);
 		return this.execute(this.hcpApiGetMethod, hcpGet);
 	}
 
 	@Override
 	public BaseHcpInfo execute(IHcpDelete hpDelete) throws HcpCodeExcepton {
+		this.hcpMethodCheck.check(hpDelete);
 		return this.execute(this.hcpApiDeleteMehtod, hpDelete);
 	}
 
 	@Override
 	public BaseHcpInfo execute(IHcpPut hcpPut) throws HcpCodeExcepton {
+		this.hcpMethodCheck.check(hcpPut);
 		return this.execute(this.hcpApiPutMehtod, hcpPut);
 	}
 
 	@Override
 	public HcpOption getOption() {
 		return this.option;
-	}
-
-	public void check(IHcpMethod method) {
-		method.check();
 	}
 
 	@Override
