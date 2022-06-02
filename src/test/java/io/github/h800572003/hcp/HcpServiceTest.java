@@ -6,9 +6,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.h800572003.hcp.exception.HcpCodeExcepton;
@@ -21,7 +21,7 @@ import io.github.h800572003.hcp.method.put.HcpPut;
 import io.github.h800572003.hcp.utils.HcpUtil;
 import lombok.extern.slf4j.Slf4j;
 
-//@Disabled
+@Disabled
 @Slf4j
 class HcpServiceTest {
 
