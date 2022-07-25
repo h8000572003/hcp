@@ -1,10 +1,12 @@
-package io.github.h800572003.hcp.method.delete;
+package io.github.h800572003.hcp.method.post;
 
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import io.github.h800572003.hcp.HcpOption;
@@ -13,16 +15,19 @@ import io.github.h800572003.hcp.exception.HcpBusinessException;
 import io.github.h800572003.hcp.exception.HcpCodeExcepton;
 import io.github.h800572003.hcp.method.BaseHcpInfo;
 import io.github.h800572003.hcp.method.get.HcpApiMethod;
-import io.github.h800572003.hcp.method.get.IHcpGet;
 
-public class HcpApiDeleteMehtod implements HcpApiMethod<IHcpDelete, BaseHcpInfo> {
+public class HcpApiPostMehtod implements HcpApiMethod<IHcpPost, BaseHcpInfo> {
 
+	
 	@Override
-	public BaseHcpInfo execute(IHcpDelete hcpMethod, IHcpContext hcpService) throws HcpCodeExcepton {
+	public BaseHcpInfo execute(IHcpPost hcpMethod, IHcpContext hcpService) throws HcpCodeExcepton {
 		HcpOption option = hcpService.getOption();
 		CloseableHttpClient client = hcpService.getClient();
-		HttpDelete request = new HttpDelete(option.getRest() + hcpMethod.toHcpPath());
+		HttpPost request = new HttpPost(option.getRest() + hcpMethod.toHcpPath());
 		request.addHeader("Authorization", hcpService.getAuthorization());
+		ByteArrayEntity requestEntity = new ByteArrayEntity(hcpMethod.getPutByte());
+		request.setEntity(requestEntity);
+
 		try (CloseableHttpResponse response = client.execute(request)) {
 			int statusCode = response.getStatusLine().getStatusCode();
 			if (hcpService.getStatusCodeChecker().isOk(hcpMethod, statusCode)) {

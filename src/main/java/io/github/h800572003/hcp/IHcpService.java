@@ -9,6 +9,7 @@ import io.github.h800572003.hcp.method.delete.IHcpDelete;
 import io.github.h800572003.hcp.method.get.GetHcpInfo;
 import io.github.h800572003.hcp.method.get.HcpApiMethod;
 import io.github.h800572003.hcp.method.get.IHcpGet;
+import io.github.h800572003.hcp.method.post.IHcpPost;
 import io.github.h800572003.hcp.method.put.IHcpPut;
 
 public interface IHcpService {
@@ -16,6 +17,8 @@ public interface IHcpService {
 	<O extends Serializable, I extends IHcpMethod> O execute(HcpApiMethod<I, O> api, I cmd) throws HcpCodeExcepton;
 
 	GetHcpInfo execute(IHcpGet hcpGet) throws HcpCodeExcepton;
+
+	BaseHcpInfo execute(IHcpPost hcpPost) throws HcpCodeExcepton;
 
 	BaseHcpInfo execute(IHcpDelete hpDelete) throws HcpCodeExcepton;
 

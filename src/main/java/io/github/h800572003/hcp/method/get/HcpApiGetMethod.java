@@ -22,7 +22,7 @@ public class HcpApiGetMethod implements HcpApiMethod<IHcpGet, GetHcpInfo> {
 		request.addHeader("Authorization", hcpService.getAuthorization());
 		try (CloseableHttpResponse response = client.execute(request)) {
 			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode == 200) {
+			if (hcpService.getStatusCodeChecker().isOk(get, statusCode)) {
 				return new GetHcpInfo(response);
 			}
 			throw new HcpCodeExcepton(statusCode, response.getStatusLine().getReasonPhrase());

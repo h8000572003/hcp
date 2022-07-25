@@ -28,7 +28,7 @@ public class HcpApiPutMehtod implements HcpApiMethod<IHcpPut, BaseHcpInfo> {
 
 		try (CloseableHttpResponse response = client.execute(request)) {
 			int statusCode = response.getStatusLine().getStatusCode();
-			if (statusCode == 200) {
+			if (hcpService.getStatusCodeChecker().isOk(hcpMethod, statusCode)) {
 				return new BaseHcpInfo(response);
 			}
 			throw new HcpCodeExcepton(statusCode, response.getStatusLine().getReasonPhrase());

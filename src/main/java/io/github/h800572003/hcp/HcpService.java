@@ -9,38 +9,48 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import io.github.h800572003.hcp.exception.HcpCodeExcepton;
 import io.github.h800572003.hcp.method.BaseHcpInfo;
 import io.github.h800572003.hcp.method.IHcpMethod;
+import io.github.h800572003.hcp.method.IStatusCodeChecker;
+import io.github.h800572003.hcp.method.StatusCodeChecker;
 import io.github.h800572003.hcp.method.delete.HcpApiDeleteMehtod;
 import io.github.h800572003.hcp.method.delete.IHcpDelete;
 import io.github.h800572003.hcp.method.get.GetHcpInfo;
 import io.github.h800572003.hcp.method.get.HcpApiGetMethod;
 import io.github.h800572003.hcp.method.get.HcpApiMethod;
 import io.github.h800572003.hcp.method.get.IHcpGet;
+import io.github.h800572003.hcp.method.post.HcpApiPostMehtod;
+import io.github.h800572003.hcp.method.post.IHcpPost;
 import io.github.h800572003.hcp.method.put.HcpApiPutMehtod;
 import io.github.h800572003.hcp.method.put.IHcpPut;
 import io.github.h800572003.hcp.utils.HcpHttpClientBuilder;
-import io.github.h800572003.hcp.utils.HcpUtil;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class HcpService implements IHcpService, IHcpContext {
 	private final CloseableHttpClient client;
+	private final IStatusCodeChecker statusCodeChecker;
 	private final HcpOption option;
 	private final HcpApiGetMethod hcpApiGetMethod = new HcpApiGetMethod();
 	private final HcpApiDeleteMehtod hcpApiDeleteMehtod = new HcpApiDeleteMehtod();
 	private final HcpApiPutMehtod hcpApiPutMehtod = new HcpApiPutMehtod();
+	private final HcpApiPostMehtod hcpApiPostMehtod = new HcpApiPostMehtod();
 	private final Supplier<String> getToken;// 取得token策略
 	private final IHcpMethodCheck hcpMethodCheck;
 
-	public HcpService(CloseableHttpClient client, HcpOption option, IHcpMethodCheck hcpMethodCheck) {
+	public HcpService(CloseableHttpClient client, HcpOption option, IHcpMethodCheck hcpMethodCheck,
+			IStatusCodeChecker statusCodeChecker) {
 		this.client = client;
 		this.option = option;
 		this.option.check();
 		this.getToken = option.getTokens();
 		this.hcpMethodCheck = hcpMethodCheck;
+		this.statusCodeChecker = statusCodeChecker;
 	}
 
 	public HcpService(HcpOption option) {
-		this(HcpHttpClientBuilder.build(), option, new HcpMethodCheck());
+		this(HcpHttpClientBuilder.build(), //
+				option, //
+				new HcpMethodCheck(), //
+				new StatusCodeChecker());//
 	}
 
 	@Override
@@ -90,4 +100,16 @@ public class HcpService implements IHcpService, IHcpContext {
 	public String getAuthorization() {
 		return this.getToken.get();
 	}
+
+	@Override
+	public IStatusCodeChecker getStatusCodeChecker() {
+		return this.statusCodeChecker;
+	}
+
+	@Override
+	public BaseHcpInfo execute(IHcpPost hcpPost) throws HcpCodeExcepton {
+		this.hcpMethodCheck.check(hcpPost);
+		return this.execute(this.hcpApiPostMehtod, hcpPost);
+	}
+
 }

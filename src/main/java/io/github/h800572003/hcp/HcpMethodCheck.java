@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import io.github.h800572003.hcp.exception.HcpBusinessException;
 import io.github.h800572003.hcp.method.delete.IHcpDelete;
 import io.github.h800572003.hcp.method.get.IHcpGet;
+import io.github.h800572003.hcp.method.post.IHcpPost;
 import io.github.h800572003.hcp.method.put.IHcpPut;
 
 public class HcpMethodCheck implements IHcpMethodCheck {
@@ -34,6 +35,17 @@ public class HcpMethodCheck implements IHcpMethodCheck {
 		if (api.getPutByte() == null) {
 			throw new HcpBusinessException(PUT_BYTE_IS_REQUIRE);
 		}
+	}
+
+	@Override
+	public void check(IHcpPost api) {
+		if (StringUtils.isBlank(api.toHcpPath())) {
+			throw new HcpBusinessException(PATH_IS_REQUIRE);
+		}
+		if (api.getPutByte() == null) {
+			throw new HcpBusinessException(PUT_BYTE_IS_REQUIRE);
+		}
+		
 	}
 
 }
