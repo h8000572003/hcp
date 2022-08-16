@@ -4,9 +4,8 @@ public interface IStatusCodeChecker {
 
 	/**
 	 * 是否ok
-	 * 
-	 * @param code
+	 *
 	 */
-	public boolean isOk(IHcpMethod hcpMehtod, int code);
+	boolean isOk(IHcpMethod hcpMethod, int code);
 
 }

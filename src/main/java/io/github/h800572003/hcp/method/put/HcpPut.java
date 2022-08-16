@@ -9,7 +9,7 @@ import io.github.h800572003.hcp.method.PathBuilder;
 
 public class HcpPut implements IHcpPut {
 	private String path;
-	private byte[] putByte;
+	private final byte[] putByte;
 
 	public HcpPut(PathBuilder pathBuilder, byte[] myByte) {
 		super();

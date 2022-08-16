@@ -1,9 +1,5 @@
 package io.github.h800572003.hcp.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -32,7 +28,7 @@ public enum HcpUtil {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			md.update(input.getBytes());
 			byte[] digest = md.digest();
-			StringBuffer sb = new StringBuffer();
+			StringBuilder sb = new StringBuilder();
 			for (byte b : digest) {
 				sb.append(String.format("%02x", b & 0xff));
 			}

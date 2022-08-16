@@ -2,7 +2,7 @@ package io.github.h800572003.hcp;
 
 import java.io.Serializable;
 
-import io.github.h800572003.hcp.exception.HcpCodeExcepton;
+import io.github.h800572003.hcp.exception.HcpCodeException;
 import io.github.h800572003.hcp.method.BaseHcpInfo;
 import io.github.h800572003.hcp.method.IHcpMethod;
 import io.github.h800572003.hcp.method.delete.IHcpDelete;
@@ -14,15 +14,15 @@ import io.github.h800572003.hcp.method.put.IHcpPut;
 
 public interface IHcpService {
 
-	<O extends Serializable, I extends IHcpMethod> O execute(HcpApiMethod<I, O> api, I cmd) throws HcpCodeExcepton;
+	<O extends Serializable, I extends IHcpMethod> O execute(HcpApiMethod<I, O> api, I cmd) throws HcpCodeException;
 
-	GetHcpInfo execute(IHcpGet hcpGet) throws HcpCodeExcepton;
+	GetHcpInfo execute(IHcpGet hcpGet) throws HcpCodeException;
 
-	BaseHcpInfo execute(IHcpPost hcpPost) throws HcpCodeExcepton;
+	BaseHcpInfo execute(IHcpPost hcpPost) throws HcpCodeException;
 
-	BaseHcpInfo execute(IHcpDelete hpDelete) throws HcpCodeExcepton;
+	BaseHcpInfo execute(IHcpDelete hpDelete) throws HcpCodeException;
 
-	BaseHcpInfo execute(IHcpPut hcpPut) throws HcpCodeExcepton;
+	BaseHcpInfo execute(IHcpPut hcpPut) throws HcpCodeException;
 
 	void close();
 

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import io.github.h800572003.hcp.exception.HcpCodeExcepton;
+import io.github.h800572003.hcp.exception.HcpCodeException;
 import io.github.h800572003.hcp.method.BaseHcpInfo;
 import io.github.h800572003.hcp.method.PathBuilder;
 import io.github.h800572003.hcp.method.delete.HcpDelete;
@@ -27,9 +27,9 @@ class HcpServiceTest {
 
 	IHcpService hcpService;
 	private String token = "";
-	private String user = "-";
-	private String pwd = "-";
-	private String url = "-";
+	private final String user = "-";
+	private final String pwd = "-";
+	private final String url = "-";
 
 	public HcpServiceTest() {
 		token = "HCP " + HcpUtil.getBase64Value(user) + ":" + HcpUtil.getMD5Value(pwd);
@@ -43,7 +43,7 @@ class HcpServiceTest {
 	}
 
 	@Test
-	void test_execute_then_get_then_size() throws HcpCodeExcepton {
+	void test_execute_then_get_then_size() throws HcpCodeException {
 
 		PathBuilder path = PathBuilder.builder()//
 				.filename("x.pdf")//
@@ -60,7 +60,7 @@ class HcpServiceTest {
 	}
 
 	@Test
-	void test_execute_then_delete() throws HcpCodeExcepton {
+	void test_execute_then_delete() throws HcpCodeException {
 
 		PathBuilder path = PathBuilder.builder()//
 				.filename("x.pdf")//
@@ -75,7 +75,7 @@ class HcpServiceTest {
 	}
 
 	@Test
-	void test_execute_then_put() throws IOException, URISyntaxException, HcpCodeExcepton {
+	void test_execute_then_put() throws IOException, URISyntaxException, HcpCodeException {
 
 		PathBuilder path = PathBuilder.builder()//
 				.filename("x.pdf")//
@@ -85,6 +85,7 @@ class HcpServiceTest {
 
 		URL resource = HcpServiceTest.class.getClassLoader().getResource("test.zip");
 
+		assert resource != null;
 		byte[] myByte = FileUtils.readFileToByteArray(new File(resource.toURI()));
 
 		HcpPut cmd = new HcpPut(path, myByte);

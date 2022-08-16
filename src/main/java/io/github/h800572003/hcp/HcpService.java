@@ -2,24 +2,23 @@ package io.github.h800572003.hcp;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.function.Supplier;
 
 import org.apache.http.impl.client.CloseableHttpClient;
 
-import io.github.h800572003.hcp.exception.HcpCodeExcepton;
+import io.github.h800572003.hcp.exception.HcpCodeException;
 import io.github.h800572003.hcp.method.BaseHcpInfo;
 import io.github.h800572003.hcp.method.IHcpMethod;
 import io.github.h800572003.hcp.method.IStatusCodeChecker;
 import io.github.h800572003.hcp.method.StatusCodeChecker;
-import io.github.h800572003.hcp.method.delete.HcpApiDeleteMehtod;
+import io.github.h800572003.hcp.method.delete.HcpApiDeleteMethod;
 import io.github.h800572003.hcp.method.delete.IHcpDelete;
 import io.github.h800572003.hcp.method.get.GetHcpInfo;
 import io.github.h800572003.hcp.method.get.HcpApiGetMethod;
 import io.github.h800572003.hcp.method.get.HcpApiMethod;
 import io.github.h800572003.hcp.method.get.IHcpGet;
-import io.github.h800572003.hcp.method.post.HcpApiPostMehtod;
+import io.github.h800572003.hcp.method.post.HcpApiPostMethod;
 import io.github.h800572003.hcp.method.post.IHcpPost;
-import io.github.h800572003.hcp.method.put.HcpApiPutMehtod;
+import io.github.h800572003.hcp.method.put.HcpApiPutMethod;
 import io.github.h800572003.hcp.method.put.IHcpPut;
 import io.github.h800572003.hcp.utils.HcpHttpClientBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -30,10 +29,9 @@ public class HcpService implements IHcpService, IHcpContext {
 	private final IStatusCodeChecker statusCodeChecker;
 	private final HcpOption option;
 	private final HcpApiGetMethod hcpApiGetMethod = new HcpApiGetMethod();
-	private final HcpApiDeleteMehtod hcpApiDeleteMehtod = new HcpApiDeleteMehtod();
-	private final HcpApiPutMehtod hcpApiPutMehtod = new HcpApiPutMehtod();
-	private final HcpApiPostMehtod hcpApiPostMehtod = new HcpApiPostMehtod();
-	private final Supplier<String> getToken;// 取得token策略
+	private final HcpApiDeleteMethod hcpApiDeleteMethod = new HcpApiDeleteMethod();
+	private final HcpApiPutMethod hcpApiPutMethod = new HcpApiPutMethod();
+	private final HcpApiPostMethod hcpApiPostMethod = new HcpApiPostMethod();
 	private final IHcpMethodCheck hcpMethodCheck;
 
 	public HcpService(CloseableHttpClient client, HcpOption option, IHcpMethodCheck hcpMethodCheck,
@@ -41,7 +39,6 @@ public class HcpService implements IHcpService, IHcpContext {
 		this.client = client;
 		this.option = option;
 		this.option.check();
-		this.getToken = option.getTokens();
 		this.hcpMethodCheck = hcpMethodCheck;
 		this.statusCodeChecker = statusCodeChecker;
 	}
@@ -55,26 +52,26 @@ public class HcpService implements IHcpService, IHcpContext {
 
 	@Override
 	public <O extends Serializable, I extends IHcpMethod> O execute(HcpApiMethod<I, O> api, I cmd)
-			throws HcpCodeExcepton {
+			throws HcpCodeException {
 		return api.execute(cmd, this);
 	}
 
 	@Override
-	public GetHcpInfo execute(IHcpGet hcpGet) throws HcpCodeExcepton {
+	public GetHcpInfo execute(IHcpGet hcpGet) throws HcpCodeException {
 		this.hcpMethodCheck.check(hcpGet);
 		return this.execute(this.hcpApiGetMethod, hcpGet);
 	}
 
 	@Override
-	public BaseHcpInfo execute(IHcpDelete hpDelete) throws HcpCodeExcepton {
+	public BaseHcpInfo execute(IHcpDelete hpDelete) throws HcpCodeException {
 		this.hcpMethodCheck.check(hpDelete);
-		return this.execute(this.hcpApiDeleteMehtod, hpDelete);
+		return this.execute(this.hcpApiDeleteMethod, hpDelete);
 	}
 
 	@Override
-	public BaseHcpInfo execute(IHcpPut hcpPut) throws HcpCodeExcepton {
+	public BaseHcpInfo execute(IHcpPut hcpPut) throws HcpCodeException {
 		this.hcpMethodCheck.check(hcpPut);
-		return this.execute(this.hcpApiPutMehtod, hcpPut);
+		return this.execute(this.hcpApiPutMethod, hcpPut);
 	}
 
 	@Override
@@ -98,7 +95,7 @@ public class HcpService implements IHcpService, IHcpContext {
 
 	@Override
 	public String getAuthorization() {
-		return this.getToken.get();
+		return option.getTokens().get();
 	}
 
 	@Override
@@ -107,9 +104,9 @@ public class HcpService implements IHcpService, IHcpContext {
 	}
 
 	@Override
-	public BaseHcpInfo execute(IHcpPost hcpPost) throws HcpCodeExcepton {
+	public BaseHcpInfo execute(IHcpPost hcpPost) throws HcpCodeException {
 		this.hcpMethodCheck.check(hcpPost);
-		return this.execute(this.hcpApiPostMehtod, hcpPost);
+		return this.execute(this.hcpApiPostMethod, hcpPost);
 	}
 
 }

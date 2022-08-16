@@ -1,12 +1,9 @@
 package io.github.h800572003.hcp.method.delete;
 
-import org.apache.commons.lang3.StringUtils;
-
-import io.github.h800572003.hcp.exception.HcpBusinessException;
 import io.github.h800572003.hcp.method.PathBuilder;
 
 public class HcpDelete implements IHcpDelete {
-	private String path;
+	private final String path;
 
 	public HcpDelete(PathBuilder pathBuilder) {
 		super();

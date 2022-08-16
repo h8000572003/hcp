@@ -1,10 +1,9 @@
-package io.github.h800572003.hcp.method.post;
+package io.github.h800572003.hcp.method.put;
 
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -12,18 +11,20 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import io.github.h800572003.hcp.HcpOption;
 import io.github.h800572003.hcp.IHcpContext;
 import io.github.h800572003.hcp.exception.HcpBusinessException;
-import io.github.h800572003.hcp.exception.HcpCodeExcepton;
+import io.github.h800572003.hcp.exception.HcpCodeException;
 import io.github.h800572003.hcp.method.BaseHcpInfo;
 import io.github.h800572003.hcp.method.get.HcpApiMethod;
 
-public class HcpApiPostMehtod implements HcpApiMethod<IHcpPost, BaseHcpInfo> {
+/**
+ * 使用put 方法
+ */
+public class HcpApiPutMethod implements HcpApiMethod<IHcpPut, BaseHcpInfo> {
 
-	
 	@Override
-	public BaseHcpInfo execute(IHcpPost hcpMethod, IHcpContext hcpService) throws HcpCodeExcepton {
+	public BaseHcpInfo execute(IHcpPut hcpMethod, IHcpContext hcpService) throws HcpCodeException {
 		HcpOption option = hcpService.getOption();
 		CloseableHttpClient client = hcpService.getClient();
-		HttpPost request = new HttpPost(option.getRest() + hcpMethod.toHcpPath());
+		HttpPut request = new HttpPut(option.getRest() + hcpMethod.toHcpPath());
 		request.addHeader("Authorization", hcpService.getAuthorization());
 		ByteArrayEntity requestEntity = new ByteArrayEntity(hcpMethod.getPutByte());
 		request.setEntity(requestEntity);
@@ -33,11 +34,11 @@ public class HcpApiPostMehtod implements HcpApiMethod<IHcpPost, BaseHcpInfo> {
 			if (hcpService.getStatusCodeChecker().isOk(hcpMethod, statusCode)) {
 				return new BaseHcpInfo(response);
 			}
-			throw new HcpCodeExcepton(statusCode, response.getStatusLine().getReasonPhrase());
+			throw new HcpCodeException(statusCode, response.getStatusLine().getReasonPhrase());
 		} catch (ClientProtocolException e) {
-			throw new HcpBusinessException("HcpApiDeleteMehtod error ClientProtocolException", e);
+			throw new HcpBusinessException("HcpApiDeleteMethod error ClientProtocolException", e);
 		} catch (IOException e) {
-			throw new HcpBusinessException("HcpApiDeleteMehtod error IOException", e);
+			throw new HcpBusinessException("HcpApiDeleteMethod error IOException", e);
 		}
 	}
 

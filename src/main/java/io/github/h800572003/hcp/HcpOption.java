@@ -9,8 +9,8 @@ import lombok.Getter;
 
 @Getter
 public class HcpOption {
-	private String rest;
-	private Supplier<String> tokens;
+	private final String rest;
+	private final Supplier<String> tokens;
 	public HcpOption(String rest, Supplier<String> tokens) {
 		super();
 		this.rest = rest;

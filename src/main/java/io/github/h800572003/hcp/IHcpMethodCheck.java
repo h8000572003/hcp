@@ -6,12 +6,12 @@ import io.github.h800572003.hcp.method.post.IHcpPost;
 import io.github.h800572003.hcp.method.put.IHcpPut;
 
 public interface IHcpMethodCheck {
-	public void check(IHcpGet api);
+	void check(IHcpGet api);
 
-	public void check(IHcpDelete api);
+	void check(IHcpDelete api);
 
-	public void check(IHcpPut api);
+	void check(IHcpPut api);
 
-	public void check(IHcpPost api);
+	void check(IHcpPost api);
 
 }
