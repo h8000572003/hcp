@@ -5,9 +5,12 @@ import java.util.List;
 
 import io.github.h800572003.hcp.utils.HcpUtil;
 
+/**
+ * Path builder
+ */
 public class PathBuilder {
 	private String fileName;
-	private List<String> folders = new ArrayList<>();
+	private final List<String> folders = new ArrayList<>();
 
 	public static PathBuilder builder() {
 		return new PathBuilder();
